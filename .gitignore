@@ -1,0 +1,12 @@
+# Ignore some emacs files and directorieis
+.cache
+auto-save*
+auto-save
+elpa
+org-persist
+.dap*
+.lsp*
+projectile*
+#*#
+*~
+.#*
