@@ -1,7 +1,10 @@
-(add-to-list 'load-path "~/.emacs.d/lisp/")
-(require 'init-interface)
-(require 'common-packages)
-(require 'language-servers)
+
+(require 'org)
+(require 'ob-tangle)
+
+;;; Code:
+(org-babel-load-file (expand-file-name "config.org" user-emacs-directory))
+  
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.

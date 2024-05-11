@@ -7,6 +7,10 @@ org-persist
 .dap*
 .lsp*
 projectile*
+
+# Ignore the config.el
+config.el
+
 #*#
 *~
 .#*
