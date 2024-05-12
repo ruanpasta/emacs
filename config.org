@@ -7,6 +7,10 @@ Important packages to be started first
 
 ** Melpa and Use-Pacakge
 
+The Melpa package is a respository that allows the users to install and update easily extensions for Emacs.
+The Use-Package simplify how to configure and manage packages.
+Use-package and Melpa together is a power tool to configure and personalize the emacs.
+
 #+begin_src emacs-lisp
 	;; Initialize package sources
 	(require 'package)
@@ -27,7 +31,9 @@ Important packages to be started first
 	(setq use-package-always-ensure t)
 #+end_src
 
-** Dom themes
+** Doom themes
+
+The Doom themes is a great framework option to personalize the appearance of emacs like the colors.
 
 #+begin_src emacs-lisp
 	(use-package doom-themes
@@ -44,6 +50,9 @@ Important packages to be started first
 
 ** Ivy
 
+Ivy is a generic completion mechanism for Emacs. Ivy aims to be more efficient, smaller, simpler and smother. Is higly customizable.
+Brings a interactive list of items. Could be used to improve the find system of emacs, to helps the lsp to show autocompletion options, and etc.
+
 #+begin_src emacs-lisp
 	(use-package ivy
 		:ensure t
@@ -53,6 +62,10 @@ Important packages to be started first
 
 ** Counsel
 
+Counsel is a collection of Ivy-enhanced versions of common Emacs commands.
+For exemple, you can use counsel-rg to make a perfomatic search in several files to find a word or input that can appears.
+You can use to find-file, recent files visited, navigation of bookmarks, etc.
+
 #+begin_src emacs-lisp
 	(use-package counsel
 		:ensure t)
@@ -61,6 +74,9 @@ Important packages to be started first
 
 ** Doom Mode Line
 
+The doom-modeline offers a customizable bottom bar, with different icons, colors, position of elements, etc.
+I commonly has a good integration with the doom-themes. So if you change the theme, you will change doom-modeline design also.
+
 #+begin_src emacs-lisp
 	(use-package doom-modeline
 		:ensure t
@@ -68,6 +84,8 @@ Important packages to be started first
 #+end_src
 
 ** Nerd Icons
+
+With nerd Icons you can have a better options of icons that can be used by Emacs and others package. 
 
 #+begin_src emacs-lisp
 	(use-package nerd-icons
@@ -80,6 +98,9 @@ Important packages to be started first
 #+end_src
 
 ** Projectile
+
+It's a good option to define projects, switch fastly through projects, find projects,
+switch to recently files to each project, and etc. 
 
 #+begin_src emacs-lisp
 	;; To improve the project navigation and search
@@ -97,6 +118,10 @@ Important packages to be started first
 
 
 ** LSP Mode
+
+LSP Mode is a 'Language Server Protocol' that support multiples languages for Emacs.
+Is used to have while coding, autocompletion, erros detection, refactors, tips/hints, etc.
+And this package has a great integration with other packages.
 
 #+begin_src emacs-lisp
 	;; LANGUAGE SERVERS
@@ -117,7 +142,11 @@ Important packages to be started first
 		:commands lsp lsp-deferred)
 #+end_src
 
-** LSP Ui
+** LSP UI
+
+The LSP UI is a default option to be used with LSP Mode.
+Offers a friendly and interactive interface for a LSP functionalities like,
+menus, docs in frames and inline, etc.
 
 #+begin_src emacs-lisp
 	(use-package lsp-ui
@@ -151,6 +180,9 @@ Important packages to be started first
 #+end_src
 
 ** Company
+
+The company-mode is a text completion framework for Emacs. It display completion candidates while typing.
+
 #+begin_src emacs-lisp
 	;; Auto completion package
 	(use-package company
@@ -213,6 +245,10 @@ Visual interface configs
 
 ** Setting the languages packages
 
+This section is used to configure the languages that you want to work in emacs.
+Remember to check the emacs-lsp.github.io to see how to install each language.
+Sometimes is necessary to install the specific language server in your system.
+
 #+begin_src emacs-lisp
 
 	;; For TypeScript/JavaScript/React/Node.js
@@ -254,6 +290,10 @@ Visual interface configs
 #+end_src
 
 ** Flycheck
+
+Flycheck is a powerful tool to show error message tooltips, fringe indicators,
+erros/warnings underline, erros/warnings in mode line (the bottom bar).
+
 #+begin_src emacs-lisp
 	;; Instalar o pacote flycheck
 	(use-package flycheck
@@ -264,6 +304,8 @@ Visual interface configs
 #+end_src
 
 ** Prettier
+
+Is a package to pretty your code following the patterns defineds in prettier to your project.
 
 #+begin_src emacs-lisp
 	(use-package prettier
@@ -276,6 +318,8 @@ Visual interface configs
 #+end_src
 
 ** Dap Mode
+
+Is a package used to debbug your code in Emacs.
 
 #+begin_src emacs-lisp
 	;; optionally if you want to use debugger
