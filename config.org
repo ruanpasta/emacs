@@ -223,6 +223,10 @@ Visual interface configs
 
 * Emacs improvments
 
+Here we have an important package, the WhichKey.
+This package show a tooltips about the possible next key to call a function in emacs.
+Improve how we use and remember the shortcuts.
+
 #+begin_src emacs-lisp
 	;; Define the directory to store the temp files
 	(setq auto-save-file-name-transforms
