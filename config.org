@@ -2,6 +2,32 @@
 #+author: Ruan Pasta
 #+date: 2020-05-10
 
+* MENU :TOC:
+- [[#startup][Startup]]
+  - [[#melpa-and-use-pacakge][Melpa and Use-Pacakge]]
+  - [[#doom-themes][Doom themes]]
+  - [[#ivy][Ivy]]
+  - [[#counsel][Counsel]]
+  - [[#doom-mode-line][Doom Mode Line]]
+  - [[#nerd-icons][Nerd Icons]]
+  - [[#projectile][Projectile]]
+  - [[#lsp-mode][LSP Mode]]
+  - [[#lsp-ui][LSP UI]]
+  - [[#company][Company]]
+- [[#interface][Interface]]
+- [[#emacs-improvments][Emacs improvments]]
+- [[#languages-mode][Language's mode]]
+  - [[#setting-the-languages-packages][Setting the languages packages]]
+  - [[#flycheck][Flycheck]]
+  - [[#prettier][Prettier]]
+  - [[#magit][Magit]]
+  - [[#dap-mode][Dap Mode]]
+- [[#other-packages][Other packages]]
+  - [[#comand-log-mode][Comand Log Mode]]
+  - [[#org][Org]]
+- [[#evil--for-vim-][EVIL ( For vim )]]
+- [[#org-roam--for-links-between-org-files-][Org Roam ( for links between org files )]]
+
 * Startup
 Important packages to be started first
 
@@ -362,6 +388,7 @@ It's a great option for an apresentation about emacs.
 		:ensure t
 		:custom
 		(org-confirm-babel-evaluate nil)
+		(org-startup-indented t)
 		(org-ellipsis " ▾"))
 
 	(use-package org-bullets
@@ -374,6 +401,9 @@ It's a great option for an apresentation about emacs.
 	(org-babel-do-load-languages
 	 'org-babel-load-languages
 	 '((js . t)))
+
+	(use-package toc-org
+		:ensure t)
 #+end_src
 
 #+RESULTS:
