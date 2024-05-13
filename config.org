@@ -321,6 +321,17 @@ Is a package to pretty your code following the patterns defineds in prettier to 
 					 (scss-mode . prettier-mode)))
 #+end_src
 
+** TODO Magit
+
+# Finalize the documentation a magit instalation
+
+#+begin_src emacs-lisp
+	(use-package magit
+		:ensure t)
+#+end_src
+
+#+RESULTS:
+
 ** Dap Mode
 
 Is a package used to debbug your code in Emacs.
@@ -331,3 +342,42 @@ Is a package used to debbug your code in Emacs.
 		:after lsp-mode
 		:commands dap-debug)
 #+end_src
+
+
+* Other packages
+
+** Comand Log Mode
+
+With this package we can se in other buffer which shortcuts and what we are typing.
+It's a great option for an apresentation about emacs.
+
+#+begin_src emacs-lisp
+	(use-package command-log-mode)
+#+end_src
+
+** Org
+
+#+begin_src emacs-lisp
+	(use-package org
+		:ensure t
+		:custom
+		(org-confirm-babel-evaluate nil)
+		(org-ellipsis " ▾"))
+
+	(use-package org-bullets
+		:ensure t
+		:after org
+		:hook (org-mode . org-bullets-mode)
+		:custom
+		(org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+
+	(org-babel-do-load-languages
+	 'org-babel-load-languages
+	 '((js . t)))
+#+end_src
+
+#+RESULTS:
+
+* TODO EVIL ( For vim )
+
+* TODO Org Roam ( for links between org files )
