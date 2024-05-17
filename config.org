@@ -14,7 +14,7 @@
   - [[#lsp-mode][LSP Mode]]
   - [[#lsp-ui][LSP UI]]
   - [[#company][Company]]
-- [[#interface][Interface]]
+- [[#iimageAttributesnterface][Interface]]
 - [[#emacs-improvments][Emacs improvments]]
 - [[#languages-mode][Language's mode]]
   - [[#setting-the-languages-packages][Setting the languages packages]]
@@ -25,8 +25,10 @@
 - [[#other-packages][Other packages]]
   - [[#comand-log-mode][Comand Log Mode]]
   - [[#org][Org]]
-- [[#evil--for-vim-][EVIL ( For vim )]]
-- [[#org-roam--for-links-between-org-files-][Org Roam ( for links between org files )]]
+  - [[#evil][EVIL]]
+  - [[#org-roam--for-links-between-org-files-][Org Roam ( for links between org files )]]
+  - [[#browser][Browser]]
+  - [[#shell][Shell]]
 
 * Startup
 Important packages to be started first
@@ -224,28 +226,41 @@ The company-mode is a text completion framework for Emacs. It display completion
 Visual interface configs
 
 #+begin_src emacs-lisp
-	;; Show the line numbers
-	(global-display-line-numbers-mode)
+  ;; Show the line numbers
+  (global-display-line-numbers-mode)
 
-	;; Removing the menu from toolbar
-	(menu-bar-mode -1)
-	(tool-bar-mode -1)
+  ;; Break lines in emacs to dosen't have vertical scroll
+  (global-visual-line-mode 1)
 
-	;; Removing the inicial emacs screen
-	(setq inhibit-startup-screen t)
+  ;; Show the line numbers relative to current line
+  (setq-default display-line-numbers-type 'relative)
 
-	;; Removing the side scroll bar
-	(scroll-bar-mode -1)
+  ;; Removing the menu from toolbar
+  (menu-bar-mode -1)
+  (tool-bar-mode -1)
 
-	;; Defining the default font family
-	(set-face-attribute 'default nil :font "FiraCode Nerd Font Mono")
+  ;; Removing the inicial emacs screen
+  (setq inhibit-startup-screen t)
 
-	;; Increasing the font size
-	(set-face-attribute 'default nil :height 140)
+  ;; Removing the side scroll bar
+  (scroll-bar-mode -1)
 
-	;; Deflaut tab size
-	(setq-default tab-width 2)
+  ;; Defining the default font family
+  (set-face-attribute 'default nil :font "FiraCode Nerd Font Mono")
+
+  ;; Increasing the font size
+  (set-face-attribute 'default nil :height 140)
+
+  ;; Deflaut tab size
+  (setq-default tab-width 2)
+
+  ;; Add the option to collapse function, objects etc ( C-c @ C-h )
+  (add-hook 'prog-mode-hook #'hs-minor-mode)
+
 #+end_src
+
+#+RESULTS:
+: 2
 
 * Emacs improvments
 
@@ -384,30 +399,54 @@ It's a great option for an apresentation about emacs.
 ** Org
 
 #+begin_src emacs-lisp
-	(use-package org
-		:ensure t
-		:custom
-		(org-confirm-babel-evaluate nil)
-		(org-startup-indented t)
-		(org-ellipsis " ▾"))
+			(use-package org
+				:ensure t
+				:custom
+				(org-confirm-babel-evaluate nil)
+				(org-startup-indented t)
+				(org-ellipsis " ▾"))
 
-	(use-package org-bullets
-		:ensure t
-		:after org
-		:hook (org-mode . org-bullets-mode)
-		:custom
-		(org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+			(use-package org-bullets
+				:ensure t
+				:after org
+				:hook (org-mode . org-bullets-mode)
+				:custom
+				(org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
 
-	(org-babel-do-load-languages
-	 'org-babel-load-languages
-	 '((js . t)))
+			(org-babel-do-load-languages
+			 'org-babel-load-languages
+			 '((js . t)))
 
-	(use-package toc-org
-		:ensure t)
+			(use-package toc-org
+				:ensure t
+				:config
+				(toc-org-mode 1))
 #+end_src
 
 #+RESULTS:
 
-* TODO EVIL ( For vim )
+** EVIL
 
-* TODO Org Roam ( for links between org files )
+The Evil package give us a power of text editing with VIM inside the emacs.
+
+	#+begin_src emacs-lisp
+    ;; Comented because a will try just with emacs comands
+     ;; (use-package evil
+     ;;   :ensure t
+     ;;   :config
+     ;;   (evil-mode 1))
+
+    ;; This command blocks when typing
+    ;; (evil-define-key 'insert global-map "jk" 'evil-normal-state)
+	#+end_src
+
+	#+RESULTS:
+
+** TODO Org Roam ( for links between org files )
+
+** TODO Browser
+
+** TODO Shell
+
+** TODO Hydra 
+To help/eliminate repetitive commands in emacs. Check if the package is hydra. 
