@@ -246,7 +246,7 @@ Visual interface configs
   (scroll-bar-mode -1)
 
   ;; Defining the default font family
-  (set-face-attribute 'default nil :font "FiraCode Nerd Font Mono")
+  (set-face-attribute 'default nil :font "JetBrainsMono Nerd Font")
 
   ;; Increasing the font size
   (set-face-attribute 'default nil :height 140)
@@ -431,10 +431,10 @@ The Evil package give us a power of text editing with VIM inside the emacs.
 
 	#+begin_src emacs-lisp
     ;; Comented because a will try just with emacs comands
-     ;; (use-package evil
-     ;;   :ensure t
-     ;;   :config
-     ;;   (evil-mode 1))
+     (use-package evil
+       :ensure t
+       :config
+       (evil-mode 1))
 
     ;; This command blocks when typing
     ;; (evil-define-key 'insert global-map "jk" 'evil-normal-state)
