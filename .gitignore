@@ -2,15 +2,31 @@
 .cache
 auto-save*
 auto-save
-elpa
+elpa/
 org-persist
 .dap*
 .lsp*
 projectile*
 
+eln-cache/
+
+# Sesion files from EXWM
+session.*
+
+# Temporary files of emacs and system
+transient/
+
+# Bookmarks of Projectile
+projectile-bookmarks.eld
+
+# Shell history and files in eshell
+eshell/
+
 # Ignore the config.el
 config.el
 
+# Ignoring emacs files
 #*#
 *~
 .#*
+\#*\#
