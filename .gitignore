@@ -7,14 +7,12 @@ org-persist
 .dap*
 .lsp*
 projectile*
-
+transient/
 eln-cache/
 
 # Sesion files from EXWM
 session.*
 
-# Temporary files of emacs and system
-transient/
 
 # Bookmarks of Projectile
 projectile-bookmarks.eld

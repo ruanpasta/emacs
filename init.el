@@ -2,7 +2,12 @@
 (require 'ob-tangle)
 
 ;;; Code:
+
+;; Initial load
 (org-babel-load-file (expand-file-name "config.org" user-emacs-directory))
+(org-babel-load-file (expand-file-name "desktop.org" user-emacs-directory))
+
+;; Others
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
