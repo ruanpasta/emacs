@@ -22,7 +22,7 @@
     ;;(eshell)
 
     ;; Show battery status in the mode line
-    (display-battery-mode 1)
+    (display-battery-mode nil)
 
     ;; Show the time and date in modeline
     (setq display-time-day-and-date t)
@@ -54,12 +54,14 @@
     (interactive)
     (pcase exwm-class-name
       ("Firefox-esr" (exwm-workspace-move-window 2))
-      ("Firefox-esr" (exwm-workspace-move-window 3))
-      ("Slack" (exwm-workspace-move-window 4))
-      ("discord" (exwm-workspace-move-window 5))
+      ("Slack" (exwm-workspace-move-window 3))
+      ("discord" (exwm-workspace-move-window 4))
       ("mpv" (exwm-floating-toggle-floating)
        (exwm-layout-toggle-mode-line))
       ))
+
+  (defun ruanpasta/start-discord-hook ()
+  (start-process "discord" nil "discord"))
 
   (use-package exwm
     :config
@@ -72,9 +74,11 @@
     ;; When window title updates, use it to set the buffer name
     (add-hook 'exwm-update-title-hook #'efs/exwm-update-title)
 
-
     ;; Configure windows as they're created
     (add-hook 'exwm-manage-finish-hook #'efs/configure-window-by-class)
+
+    ;; When EXWM starts up, do some extra confifuration
+    (add-hook 'exwm-init-hook #'ruanpasta/start-discord-hook)
 
     ;; When EXWM starts up, do some extra confifuration
     (add-hook 'exwm-init-hook #'efs/exwm-init-hook)
@@ -85,8 +89,12 @@
     ;; Set the screen resolution (update this to be the correct resolution for your screen!)
     (require 'exwm-randr)
     (exwm-randr-enable)
-    (start-process-shell-command "xrandr" nil "xrandr --output DP-2 --mode 2560x1440 --rate 239.96 --pos 0x0 --rotate normal")
-    (start-process-shell-command "xrandr" nil "xrandr --output DP-1 --mode 1920x1080 --rate 239.76")
+    ;; (start-process-shell-command "xrandr" nil "xrandr --output DP-2 --mode 2560x1440 --rate 239.96 --pos 0x0 --rotate normal")
+    ;; (start-process-shell-command "xrandr" nil "xrandr --output DP-1 --mode 1920x1080 --rate 239.76")
+
+  (start-process-shell-command "xrandr" nil "xrandr --output HDMI-0 --off --output DP-0 --mode 1920x1080 --rate 239.76 --pos 2560x0 --rotate normal --output DP-1 --off --output DP-2  --primary --mode 2560x1440 --rate 239.96 --pos 0x0 --rotate normal --output DP-3 --off --output DP-4 --off --output DP-5 --off")
+
+    (setq exwm-randr-workspace-monitor-plist '(2 "DP-0" 3 "DP-0"))
 
     ;; Set the wallpaper after change the resolution
     (efs/set-wallpaper)
