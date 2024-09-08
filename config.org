@@ -3,233 +3,78 @@
 #+date: 2020-05-10
 
 * MENU :TOC:
-- [[#startup][Startup]]
-  - [[#melpa-and-use-pacakge][Melpa and Use-Pacakge]]
-  - [[#doom-themes][Doom themes]]
-  - [[#ivy][Ivy]]
-  - [[#counsel][Counsel]]
-  - [[#doom-mode-line][Doom Mode Line]]
-  - [[#nerd-icons][Nerd Icons]]
-  - [[#projectile][Projectile]]
-  - [[#lsp-mode][LSP Mode]]
-  - [[#lsp-ui][LSP UI]]
-  - [[#company][Company]]
-- [[#iimageAttributesnterface][Interface]]
-- [[#emacs-improvments][Emacs improvments]]
-- [[#languages-mode][Language's mode]]
-  - [[#setting-the-languages-packages][Setting the languages packages]]
-  - [[#flycheck][Flycheck]]
-  - [[#prettier][Prettier]]
-  - [[#magit][Magit]]
-  - [[#dap-mode][Dap Mode]]
-- [[#other-packages][Other packages]]
-  - [[#comand-log-mode][Comand Log Mode]]
-  - [[#org][Org]]
-  - [[#evil][EVIL]]
-  - [[#org-roam--for-links-between-org-files-][Org Roam ( for links between org files )]]
-  - [[#browser][Browser]]
-  - [[#shell][Shell]]
 
 * Startup
 Important packages to be started first
 
-** Melpa and Use-Pacakge
+* Startup performance
+
+#+begin_src emacs-lisp
+  ;; The default is 800 kilobytes.  Measured in bytes.
+  (setq gc-cons-threshold (* 50 1000 1000))
+
+  (defun efs/display-startup-time ()
+    (message "Emacs loaded in %s with %d garbage collections."
+             (format "%.2f seconds"
+                     (float-time
+                      (time-subtract after-init-time before-init-time)))
+             gcs-done))
+
+  (add-hook 'emacs-startup-hook #'efs/display-startup-time)
+
+#+end_src
+
+* Package System Setup
 
 The Melpa package is a respository that allows the users to install and update easily extensions for Emacs.
 The Use-Package simplify how to configure and manage packages.
 Use-package and Melpa together is a power tool to configure and personalize the emacs.
 
 #+begin_src emacs-lisp
-    ;; Initialize package sources
-    (require 'package)
+  ;; Initialize package sources
+  (require 'package)
 
-    (setq package-archives '(("melpa" . "https://melpa.org/packages/")
-                             ("org" . "https://orgmode.org/elpa/")
-                             ("elpa" . "https://elpa.gnu.org/packages/")))
+  (setq package-archives '(("melpa" . "https://melpa.org/packages/")
+                           ("org" . "https://orgmode.org/elpa/")
+                           ("elpa" . "https://elpa.gnu.org/packages/")))
 
-    (package-initialize)
+  (package-initialize)
+  (unless package-archive-contents
+    (package-refresh-contents))
 
-    ;; Setting the EMACS env variables
-    (use-package exec-path-from-shell
-      :ensure t
-      :config
-      (exec-path-from-shell-initialize)
-      (exec-path-from-shell-copy-envs '("PATH" "NODE_PATH")))
+  ;; Initialize use-package on non-Linux platforms
+  (unless (package-installed-p 'use-package)
+    (package-install 'use-package))
 
-    (unless package-archive-contents
-      (package-refresh-contents))
+  (require 'use-package)
+  (setq use-package-always-ensure t)
 
-    ;; Initialize use-package on non-Linux platforms
-    (unless (package-installed-p 'use-package)
-      (package-install 'use-package))
-
-    (require 'use-package)
-    (setq use-package-always-ensure t)
 #+end_src
 
-
-** Doom themes
-
-The Doom themes is a great framework option to personalize the appearance of emacs like the colors.
+** Updating Emacs enviromnent variables
 
 #+begin_src emacs-lisp
-	(use-package doom-themes
-		:ensure t
-		:config
-		;; Global settings (defaults)
-		(setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
-					doom-themes-enable-italic t) ; if nil, italics is universally disabled
-		(load-theme 'doom-one t)
-
-		;; Corrects (and improves) org-mode's native fontification.
-		(doom-themes-org-config))
+  ;; Setting the EMACS env variables
+  (use-package exec-path-from-shell
+    :ensure t
+    :config
+    (exec-path-from-shell-initialize)
+    (exec-path-from-shell-copy-envs '("PATH" "NODE_PATH")))
 #+end_src
 
-** Ivy
-
-Ivy is a generic completion mechanism for Emacs. Ivy aims to be more efficient, smaller, simpler and smother. Is higly customizable.
-Brings a interactive list of items. Could be used to improve the find system of emacs, to helps the lsp to show autocompletion options, and etc.
+** Automatic Package Updates
 
 #+begin_src emacs-lisp
-	(use-package ivy
-		:ensure t
-		:config
-		(ivy-mode 1))
+  (use-package auto-package-update
+    :custom
+    (auto-package-update-interval 7)
+    (auto-package-update-prompt-before-update t)
+    (auto-package-update-hide-results t)
+    :config
+    (auto-package-update-maybe)
+    (auto-package-update-at-time "09:00"))
 #+end_src
 
-** Counsel
-
-Counsel is a collection of Ivy-enhanced versions of common Emacs commands.
-For exemple, you can use counsel-rg to make a perfomatic search in several files to find a word or input that can appears.
-You can use to find-file, recent files visited, navigation of bookmarks, etc.
-
-#+begin_src emacs-lisp
-	(use-package counsel
-		:ensure t)
-#+end_src
-
-
-** Doom Mode Line
-
-The doom-modeline offers a customizable bottom bar, with different icons, colors, position of elements, etc.
-I commonly has a good integration with the doom-themes. So if you change the theme, you will change doom-modeline design also.
-
-#+begin_src emacs-lisp
-	(use-package doom-modeline
-		:ensure t
-		:hook (after-init . doom-modeline-mode))
-#+end_src
-
-** Nerd Icons
-
-With nerd Icons you can have a better options of icons that can be used by Emacs and others package. 
-
-#+begin_src emacs-lisp
-	(use-package nerd-icons
-		;; :custom
-		;; The Nerd Font you want to use in GUI
-		;; "Symbols Nerd Font Mono" is the default and is recommended
-		;; but you can use any other Nerd Font if you want
-		;; (nerd-icons-font-family "Symbols Nerd Font Mono")
-		)
-#+end_src
-
-** Projectile
-
-It's a good option to define projects, switch fastly through projects, find projects,
-switch to recently files to each project, and etc. 
-
-#+begin_src emacs-lisp
-	;; To improve the project navigation and search
-	(use-package projectile
-		:ensure t
-		:bind (("C-c p f" . projectile-find-file)
-					 ("C-c p p" . projectile-switch-project)
-					 ("C-c p d" . projectile-find-dir)
-					 ("C-c p b" . projectile-switch-to-buffer)
-					 ("C-c p r" . projectile-replace))
-		:config
-		(add-to-list 'projectile-globally-ignored-directories "node_modules")
-		(projectile-mode +1))
-#+end_src
-
-
-** LSP Mode
-
-LSP Mode is a 'Language Server Protocol' that support multiples languages for Emacs.
-Is used to have while coding, autocompletion, erros detection, refactors, tips/hints, etc.
-And this package has a great integration with other packages.
-
-#+begin_src emacs-lisp
-    ;; LANGUAGE SERVERS
-    (use-package lsp-mode
-      :after exec-path-from-shell
-      :init
-      ;; set prefix for lsp-command-keymap (few alternatives - "C-l", "C-c l")
-      (setq lsp-keymap-prefix "C-c l")
-      :hook (
-             (json-mode . lsp-deferred)
-             (typescript-mode . lsp-deferred)
-             ;; (web-mode . lsp-deferred)
-             (svelte-mode . lsp-deferred)
-             (js-mode . lsp-deferred)
-             ;; (vue-mode . lsp-deferred)
-             (scss-mode . lsp-deferred)
-             (lsp-mode . lsp-enable-which-key-integration))
-      :commands lsp lsp-deferred)
-  (setq lsp-client-priority
-        '("ts-ls" . 10))
-#+end_src
-
-** LSP UI
-
-The LSP UI is a default option to be used with LSP Mode.
-Offers a friendly and interactive interface for a LSP functionalities like,
-menus, docs in frames and inline, etc.
-
-#+begin_src emacs-lisp
-(use-package lsp-ui
-  :after lsp-mode
-  :commands lsp-ui-mode
-  :init
-  (setq lsp-ui-doc-enable t
-        lsp-ui-doc-position 'top
-        lsp-ui-doc-header t
-        lsp-ui-doc-include-signature t
-        lsp-ui-sideline-enable t
-        lsp-ui-sideline-ignore-duplicate t
-        lsp-ui-sideline-show-hover nil
-        lsp-ui-sideline-show-symbol t
-        lsp-ui-sideline-show-diagnostics t
-        lsp-ui-sideline-update-mode 'line
-        lsp-ui-sideline-delay 1.0
-        lsp-ui-imenu-enable t
-        lsp-ui-flycheck-enable t
-        lsp-ui-flycheck-list-position 'right
-        lsp-ui-flycheck-live-reporting t
-        lsp-ui-peek-enable t
-        lsp-ui-peek-list-width 60
-        lsp-ui-peek-peek-height 25
-        lsp-ui-peek-fontify 'always
-        lsp-ui-imenu-kind-position 'top
-        lsp-headerline-breadcrumb-enable nil
-        lsp-ui-remap-xref-keybindings t))
-#+end_src
-
-** Company
-
-The company-mode is a text completion framework for Emacs. It display completion candidates while typing.
-
-#+begin_src emacs-lisp
-  ;; Auto completion package
-  (use-package company
-    :after lsp-mode
-    :hook (lsp-mode . company-mode)
-    :bind (:map company-active-map
-                ("<tab>" . company-complete-selection))
-    (:map lsp-mode-map
-          ("<tab>" . company-indent-or-complete-common)))
-#+end_src
 
 * Interface
 Visual interface configs
@@ -274,8 +119,67 @@ Visual interface configs
 
 #+end_src
 
-#+RESULTS:
-: 2
+** Doom themes
+
+The Doom themes is a great framework option to personalize the appearance of emacs like the colors.
+
+#+begin_src emacs-lisp
+  (use-package doom-themes
+    :ensure t
+    :config
+    ;; Global settings (defaults)
+    (setq doom-themes-enable-bold t    ; if nil, bold is universally disabled
+          doom-themes-enable-italic t) ; if nil, italics is universally disabled
+    (load-theme 'doom-one t)
+
+    ;; Corrects (and improves) org-mode's native fontification.
+    (doom-themes-org-config))
+#+end_src
+
+
+** Doom Mode Line
+
+The doom-modeline offers a customizable bottom bar, with different icons, colors, position of elements, etc.
+I commonly has a good integration with the doom-themes. So if you change the theme, you will change doom-modeline design also.
+
+#+begin_src emacs-lisp
+  (use-package doom-modeline
+    :ensure t
+    :hook (after-init . doom-modeline-mode))
+#+end_src
+
+** Nerd Icons
+
+With nerd Icons you can have a better options of icons that can be used by Emacs and others package. 
+
+#+begin_src emacs-lisp
+  (use-package nerd-icons
+    ;; :custom
+    ;; The Nerd Font you want to use in GUI
+    ;; "Symbols Nerd Font Mono" is the default and is recommended
+    ;; but you can use any other Nerd Font if you want
+    ;; (nerd-icons-font-family "Symbols Nerd Font Mono")
+    )
+#+end_src
+
+** Projectile
+
+It's a good option to define projects, switch fastly through projects, find projects,
+switch to recently files to each project, and etc. 
+
+#+begin_src emacs-lisp
+  ;; To improve the project navigation and search
+  (use-package projectile
+    :ensure t
+    :bind (("C-c p f" . projectile-find-file)
+           ("C-c p p" . projectile-switch-project)
+           ("C-c p d" . projectile-find-dir)
+           ("C-c p b" . projectile-switch-to-buffer)
+           ("C-c p r" . projectile-replace))
+    :config
+    (add-to-list 'projectile-globally-ignored-directories "node_modules")
+    (projectile-mode +1))
+#+end_src
 
 * Emacs improvments
 
@@ -284,97 +188,202 @@ This package show a tooltips about the possible next key to call a function in e
 Improve how we use and remember the shortcuts.
 
 #+begin_src emacs-lisp
-	;; Define the directory to store the temp files
-	(setq auto-save-file-name-transforms
-				`((".*" ,(concat user-emacs-directory "auto-save/") t)))
+  ;; Define the directory to store the temp files
+  (setq auto-save-file-name-transforms
+        `((".*" ,(concat user-emacs-directory "auto-save/") t)))
 
-	;; Create a directory if it not existis
-	(unless (file-exists-p (concat user-emacs-directory "auto-save/"))
-		(make-directory (concat user-emacs-directory "auto-save/")))
+  ;; Create a directory if it not existis
+  (unless (file-exists-p (concat user-emacs-directory "auto-save/"))
+    (make-directory (concat user-emacs-directory "auto-save/")))
 
-	;; Show shortcut suggestions when typing a command (a shortcut)
-	(use-package which-key
-		:config
-		(which-key-mode))
+  ;; Show shortcut suggestions when typing a command (a shortcut)
+  (use-package which-key
+    :defer 0
+    :diminish which-key-mode
+    :config
+    (which-key-mode)
+    (setq which-key-idle-delay 1))
 
-	;; Using charset UTF-8
-	(prefer-coding-system 'utf-8)
+  ;; Using charset UTF-8
+  (prefer-coding-system 'utf-8)
 #+end_src
 
 * Language's mode
 
-** Setting the languages packages
-
-This section is used to configure the languages that you want to work in emacs.
-Remember to check the emacs-lsp.github.io to see how to install each language.
-Sometimes is necessary to install the specific language server in your system.
+** NEW CONFIGURATION
 
 #+begin_src emacs-lisp
+    ;; IVY and COUNSEL ---------------------
+    (use-package ivy
+      :diminish
+      :bind (("C-s" . swiper)
+             :map ivy-minibuffer-map
+             ("TAB" . ivy-alt-done)
+             ("C-l" . ivy-alt-done)
+             ("C-j" . ivy-next-line)
+             ("C-k" . ivy-previous-line)
+             :map ivy-switch-buffer-map
+             ("C-k" . ivy-previous-line)
+             ("C-l" . ivy-done)
+             ("C-d" . ivy-switch-buffer-kill)
+             :map ivy-reverse-i-search-map
+             ("C-k" . ivy-previous-line)
+             ("C-d" . ivy-reverse-i-search-kill))
+      :config
+      (ivy-mode 1))
 
-  ;; For TypeScript/JavaScript/React/Node.js
-  (use-package typescript-mode
+    (use-package ivy-rich
+      :after counsel
+      :init
+      (ivy-rich-mode 1))
+
+    (use-package counsel
+      :after ivy:
+      :bind (("C-M-j" . 'counsel-switch-buffer)
+             :map minibuffer-local-map
+             ("C-r" . 'counsel-minibuffer-history))
+      :custom
+      (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
+      :config
+      (counsel-mode 1))
+
+
+    (use-package ivy-prescient
+      :after counsel
+      :custom
+      (ivy-prescient-enable-filtering nil)
+      :config
+      ;; Uncomment the following line to have sorting remembered across sessions!
+                                            ;(prescient-persist-mode 1)
+      (ivy-prescient-mode 1))
+
+    ;; LSP ---------------
+  (use-package lsp-mode
     :ensure t
-    :mode "\\.ts\\'"
-    :hook (typescript-mode . lsp-deferred))
-  (setq typescript-indent-level 2)
+    :commands (lsp lsp-deferred)
+    :hook (
+           (json-mode . lsp-deferred)
+           (typescript-mode . lsp-deferred)
+           (web-mode . lsp-deferred)
+           (vue-mode . lsp-deferred)
+           (lsp-mode . lsp-enable-which-key-integration))
+    :init
+    (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
+    :config
+    (lsp-enable-which-key-integration t))
+(setq lsp-log-io nil)
 
-  ;; For JSON
-  (use-package json-mode
-    :ensure t
-    :mode "\\.json\\'"
-    :hook (json-mode . lsp-deferred))
+    ;; LSP UI --------
+    (use-package lsp-ui
+      :after lsp-mode
+      :commands lsp-ui-mode
+      :init
+      (setq lsp-ui-doc-enable t
+            lsp-ui-doc-position 'top
+            lsp-ui-doc-header t
+            lsp-ui-doc-include-signature t
+            lsp-ui-sideline-enable t
+            lsp-ui-sideline-ignore-duplicate t
+            lsp-ui-sideline-show-hover nil
+            lsp-ui-sideline-show-symbol t
+            lsp-ui-sideline-show-diagnostics t
+            lsp-ui-sideline-update-mode 'line
+            lsp-ui-sideline-delay 1.0
+            lsp-ui-imenu-enable t
+            lsp-ui-flycheck-enable t
+            lsp-ui-flycheck-list-position 'right
+            lsp-ui-flycheck-live-reporting t
+            lsp-ui-peek-enable t
+            lsp-ui-peek-list-width 60
+            lsp-ui-peek-peek-height 25
+            lsp-ui-peek-fontify 'always
+            lsp-ui-imenu-kind-position 'top
+            lsp-headerline-breadcrumb-enable nil
+            lsp-ui-remap-xref-keybindings t))
 
-  ;; For Vue.js
-  (use-package vue-mode
-    :ensure t
-    :mode "\\.vue\\'"
-    :hook (vue-mode . lsp-deferred))
+    ;; LSP TREEMACS -------
+    (use-package lsp-treemacs
+      :after lsp)
 
-  ;; For Svelte
-  (use-package svelte-mode
-    :ensure t
-    :mode "\\.svelte\\'"
-    :hook (svelte-mode . lsp-deferred))
+    ;; LSP IVY
 
-  ;; For HTML/CSS
-  (use-package web-mode
-    :ensure t
-    :mode (("\\.html?\\'" . web-mode)
-           ("\\.css\\'" . web-mode)
-           ("\\.tsx\\'" . web-mode)
-           ("\\.jsx\\'" . web-mode))
-    :hook (web-mode . lsp-deferred))
+    (use-package lsp-ivy
+      :after lsp)
 
-  (use-package scss-mode
-    :ensure t)
+    ;; TYPESCRIPT -------------
+    (use-package typescript-mode
+      :mode "\\.ts\\'"
+      :hook (typescript-mode . lsp-deferred)
+      :config
+      (setq typescript-indent-level 2))
+
+    ;; For JSON
+    (use-package json-mode
+      :ensure t
+      :mode "\\.json\\'"
+      :hook (json-mode . lsp-deferred))
+
+    ;; For Vue.js
+    (use-package vue-mode
+      :ensure t
+      :mode "\\.vue\\'"
+      :hook (vue-mode . lsp-deferred))
+
+    ;; For Svelte
+    (use-package svelte-mode
+      :ensure t
+      :mode "\\.svelte\\'"
+      :hook (svelte-mode . lsp-deferred))
+
+    ;; For HTML/CSS
+    (use-package web-mode
+      :ensure t
+      :mode (("\\.html?\\'" . web-mode)
+             ("\\.css\\'" . web-mode)
+             ("\\.tsx\\'" . web-mode)
+             ("\\.jsx\\'" . web-mode))
+      :hook (web-mode . lsp-deferred))
+
+    (use-package scss-mode
+      :ensure t)
+
+    ;; COMPANY MODE --------
+
+    (use-package company
+      :after lsp-mode
+      :hook (lsp-mode . company-mode)
+      :bind (:map company-active-map
+                  ("<tab>" . company-complete-selection))
+      (:map lsp-mode-map
+            ("<tab>" . company-indent-or-complete-common))
+      :custom
+      (company-minimum-prefix-length 1)
+      (company-idle-delay 0.0))
+
+    (use-package company-box
+      :hook (company-mode . company-box-mode))
+
+    ;; RAINBOW DELIMITERS -------
+
+    (use-package rainbow-delimiters
+      :hook (prog-mode . rainbow-delimiters-mode))
+
+
 #+end_src
 
-** Flycheck
-
-Flycheck is a powerful tool to show error message tooltips, fringe indicators,
-erros/warnings underline, erros/warnings in mode line (the bottom bar).
-
-#+begin_src emacs-lisp
-	;; Instalar o pacote flycheck
-	(use-package flycheck
-		:ensure t
-		:config
-		;; Ativar o flycheck globalmente
-		(global-flycheck-mode))
-#+end_src
 
 ** Prettier
 
 Is a package to pretty your code following the patterns defineds in prettier to your project.
 
 #+begin_src emacs-lisp
-	(use-package prettier
-		:ensure t
-		:hook ((js2-mode . prettier-mode)
-					 (web-mode . prettier-mode)
-					 (typescript-mode . prettier-mode)
-					 (json-mode . prettier-mode)
-					 (scss-mode . prettier-mode)))
+  (use-package prettier
+    :ensure t
+    :hook ((js2-mode . prettier-mode)
+           (web-mode . prettier-mode)
+           (typescript-mode . prettier-mode)
+           (json-mode . prettier-mode)
+           (scss-mode . prettier-mode)))
 #+end_src
 
 ** TODO Magit
@@ -382,23 +391,11 @@ Is a package to pretty your code following the patterns defineds in prettier to 
 # Finalize the documentation a magit instalation
 
 #+begin_src emacs-lisp
-	(use-package magit
-		:ensure t)
+  (use-package magit
+    :ensure t)
 #+end_src
 
 #+RESULTS:
-
-** Dap Mode
-
-Is a package used to debbug your code in Emacs.
-
-#+begin_src emacs-lisp
-	;; optionally if you want to use debugger
-	(use-package dap-mode
-		:after lsp-mode
-		:commands dap-debug)
-#+end_src
-
 
 * Other packages
 
@@ -408,34 +405,34 @@ With this package we can se in other buffer which shortcuts and what we are typi
 It's a great option for an apresentation about emacs.
 
 #+begin_src emacs-lisp
-	(use-package command-log-mode)
+  (use-package command-log-mode)
 #+end_src
 
 ** Org
 
 #+begin_src emacs-lisp
-			(use-package org
-				:ensure t
-				:custom
-				(org-confirm-babel-evaluate nil)
-				(org-startup-indented t)
-				(org-ellipsis " ▾"))
+  (use-package org
+    :ensure t
+    :custom
+    (org-confirm-babel-evaluate nil)
+    (org-startup-indented t)
+    (org-ellipsis " ▾"))
 
-			(use-package org-bullets
-				:ensure t
-				:after org
-				:hook (org-mode . org-bullets-mode)
-				:custom
-				(org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+  (use-package org-bullets
+    :ensure t
+    :after org
+    :hook (org-mode . org-bullets-mode)
+    :custom
+    (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
 
-			(org-babel-do-load-languages
-			 'org-babel-load-languages
-			 '((js . t)))
+  (org-babel-do-load-languages
+   'org-babel-load-languages
+   '((js . t)))
 
-			(use-package toc-org
-				:ensure t
-				:config
-				(toc-org-mode 1))
+  (use-package toc-org
+    :ensure t
+    :config
+    (toc-org-mode 1))
 #+end_src
 
 #+RESULTS:
@@ -444,18 +441,18 @@ It's a great option for an apresentation about emacs.
 
 The Evil package give us a power of text editing with VIM inside the emacs.
 
-	#+begin_src emacs-lisp
-    ;; Comented because a will try just with emacs comands
-     (use-package evil
-       :ensure t
-       :config
-       (evil-mode 1))
+#+begin_src emacs-lisp
+  ;; Comented because a will try just with emacs comands
+  (use-package evil
+    :ensure t
+    :config
+    (evil-mode 1))
 
-    ;; This command blocks when typing
-    ;; (evil-define-key 'insert global-map "jk" 'evil-normal-state)
-	#+end_src
+  ;; This command blocks when typing
+  ;; (evil-define-key 'insert global-map "jk" 'evil-normal-state)
+#+end_src
 
-	#+RESULTS:
+#+RESULTS:
 
 ** TODO Org Roam ( for links between org files )
 
