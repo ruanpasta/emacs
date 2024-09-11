@@ -467,3 +467,5 @@ To help/eliminate repetitive commands in emacs. Check if the package is hydra.
 To open the comands in the middle of the window or other local, like M-x command or any other.
 That a good option to check if it's better than the bottom default mode.
 https://github.com/tumashu/ivy-posframe
+
+Test
