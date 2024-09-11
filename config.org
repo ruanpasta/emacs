@@ -468,4 +468,3 @@ To open the comands in the middle of the window or other local, like M-x command
 That a good option to check if it's better than the bottom default mode.
 https://github.com/tumashu/ivy-posframe
 
-Test
