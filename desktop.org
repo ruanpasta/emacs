@@ -22,7 +22,7 @@
     ;;(eshell)
 
     ;; Show battery status in the mode line
-    (display-battery-mode nil)
+    ;; (display-battery-mode nil)
 
     ;; Show the time and date in modeline
     (setq display-time-day-and-date t)
@@ -30,7 +30,7 @@
     ;; Also take a look at display-time-format and format-time-string
 
     ;; Show battery status in the mode line
-    (display-battery-mode 1)
+    ;; (display-battery-mode nil)
 
     ;; Show the time and date in modeline
     (setq display-time-day-and-date t)
@@ -88,7 +88,7 @@
 
     ;; Set the screen resolution (update this to be the correct resolution for your screen!)
     (require 'exwm-randr)
-    (exwm-randr-enable)
+    (exwm-randr-mode 1)
     ;; (start-process-shell-command "xrandr" nil "xrandr --output DP-2 --mode 2560x1440 --rate 239.96 --pos 0x0 --rotate normal")
     ;; (start-process-shell-command "xrandr" nil "xrandr --output DP-1 --mode 1920x1080 --rate 239.76")
 
@@ -102,7 +102,7 @@
     ;; Load the system tray before exwm-init
     (require 'exwm-systemtray)
     (setq exwm-systemtray-height 30)
-    (exwm-systemtray-enable)
+    (exwm-systemtray-mode 1)
 
     ;; These keys should always pass through to Emacs
     (setq exwm-input-prefix-keys

@@ -213,51 +213,51 @@ Improve how we use and remember the shortcuts.
 ** NEW CONFIGURATION
 
 #+begin_src emacs-lisp
-    ;; IVY and COUNSEL ---------------------
-    (use-package ivy
-      :diminish
-      :bind (("C-s" . swiper)
-             :map ivy-minibuffer-map
-             ("TAB" . ivy-alt-done)
-             ("C-l" . ivy-alt-done)
-             ("C-j" . ivy-next-line)
-             ("C-k" . ivy-previous-line)
-             :map ivy-switch-buffer-map
-             ("C-k" . ivy-previous-line)
-             ("C-l" . ivy-done)
-             ("C-d" . ivy-switch-buffer-kill)
-             :map ivy-reverse-i-search-map
-             ("C-k" . ivy-previous-line)
-             ("C-d" . ivy-reverse-i-search-kill))
-      :config
-      (ivy-mode 1))
+  ;; IVY and COUNSEL ---------------------
+  (use-package ivy
+    :diminish
+    :bind (("C-s" . swiper)
+           :map ivy-minibuffer-map
+           ("TAB" . ivy-alt-done)
+           ("C-l" . ivy-alt-done)
+           ("C-j" . ivy-next-line)
+           ("C-k" . ivy-previous-line)
+           :map ivy-switch-buffer-map
+           ("C-k" . ivy-previous-line)
+           ("C-l" . ivy-done)
+           ("C-d" . ivy-switch-buffer-kill)
+           :map ivy-reverse-i-search-map
+           ("C-k" . ivy-previous-line)
+           ("C-d" . ivy-reverse-i-search-kill))
+    :config
+    (ivy-mode 1))
 
-    (use-package ivy-rich
-      :after counsel
-      :init
-      (ivy-rich-mode 1))
+  (use-package ivy-rich
+    :after counsel
+    :init
+    (ivy-rich-mode 1))
 
-    (use-package counsel
-      :after ivy:
-      :bind (("C-M-j" . 'counsel-switch-buffer)
-             :map minibuffer-local-map
-             ("C-r" . 'counsel-minibuffer-history))
-      :custom
-      (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
-      :config
-      (counsel-mode 1))
+  (use-package counsel
+    :after ivy:
+    :bind (("C-M-j" . 'counsel-switch-buffer)
+           :map minibuffer-local-map
+           ("C-r" . 'counsel-minibuffer-history))
+    :custom
+    (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
+    :config
+    (counsel-mode 1))
 
 
-    (use-package ivy-prescient
-      :after counsel
-      :custom
-      (ivy-prescient-enable-filtering nil)
-      :config
-      ;; Uncomment the following line to have sorting remembered across sessions!
-                                            ;(prescient-persist-mode 1)
-      (ivy-prescient-mode 1))
+  (use-package ivy-prescient
+    :after counsel
+    :custom
+    (ivy-prescient-enable-filtering nil)
+    :config
+    ;; Uncomment the following line to have sorting remembered across sessions!
+                                          ;(prescient-persist-mode 1)
+    (ivy-prescient-mode 1))
 
-    ;; LSP ---------------
+  ;; LSP ---------------
   (use-package lsp-mode
     :ensure t
     :commands (lsp lsp-deferred)
@@ -266,109 +266,117 @@ Improve how we use and remember the shortcuts.
            (typescript-mode . lsp-deferred)
            (web-mode . lsp-deferred)
            (vue-mode . lsp-deferred)
+           (go-mode . lsp-deferred)
            (lsp-mode . lsp-enable-which-key-integration))
     :init
     (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
     :config
     (lsp-enable-which-key-integration t))
-(setq lsp-log-io nil)
+  (setq lsp-log-io nil)
 
-    ;; LSP UI --------
-    (use-package lsp-ui
-      :after lsp-mode
-      :commands lsp-ui-mode
-      :init
-      (setq lsp-ui-doc-enable t
-            lsp-ui-doc-position 'top
-            lsp-ui-doc-header t
-            lsp-ui-doc-include-signature t
-            lsp-ui-sideline-enable t
-            lsp-ui-sideline-ignore-duplicate t
-            lsp-ui-sideline-show-hover nil
-            lsp-ui-sideline-show-symbol t
-            lsp-ui-sideline-show-diagnostics t
-            lsp-ui-sideline-update-mode 'line
-            lsp-ui-sideline-delay 1.0
-            lsp-ui-imenu-enable t
-            lsp-ui-flycheck-enable t
-            lsp-ui-flycheck-list-position 'right
-            lsp-ui-flycheck-live-reporting t
-            lsp-ui-peek-enable t
-            lsp-ui-peek-list-width 60
-            lsp-ui-peek-peek-height 25
-            lsp-ui-peek-fontify 'always
-            lsp-ui-imenu-kind-position 'top
-            lsp-headerline-breadcrumb-enable nil
-            lsp-ui-remap-xref-keybindings t))
+  ;; LSP UI --------
+  (use-package lsp-ui
+    :after lsp-mode
+    :commands lsp-ui-mode
+    :init
+    (setq lsp-ui-doc-enable t
+          lsp-ui-doc-position 'top
+          lsp-ui-doc-header t
+          lsp-ui-doc-include-signature t
+          lsp-ui-sideline-enable t
+          lsp-ui-sideline-ignore-duplicate t
+          lsp-ui-sideline-show-hover nil
+          lsp-ui-sideline-show-symbol t
+          lsp-ui-sideline-show-diagnostics t
+          lsp-ui-sideline-update-mode 'line
+          lsp-ui-sideline-delay 1.0
+          lsp-ui-imenu-enable t
+          lsp-ui-flycheck-enable t
+          lsp-ui-flycheck-list-position 'right
+          lsp-ui-flycheck-live-reporting t
+          lsp-ui-peek-enable t
+          lsp-ui-peek-list-width 60
+          lsp-ui-peek-peek-height 25
+          lsp-ui-peek-fontify 'always
+          lsp-ui-imenu-kind-position 'top
+          lsp-headerline-breadcrumb-enable nil
+          lsp-ui-remap-xref-keybindings t))
 
-    ;; LSP TREEMACS -------
-    (use-package lsp-treemacs
-      :after lsp)
+  ;; LSP TREEMACS -------
+  (use-package lsp-treemacs
+    :after lsp)
 
-    ;; LSP IVY
+  ;; LSP IVY
 
-    (use-package lsp-ivy
-      :after lsp)
+  (use-package lsp-ivy
+    :after lsp)
 
-    ;; TYPESCRIPT -------------
-    (use-package typescript-mode
-      :mode "\\.ts\\'"
-      :hook (typescript-mode . lsp-deferred)
-      :config
-      (setq typescript-indent-level 2))
+  ;; TYPESCRIPT -------------
+  (use-package typescript-mode
+    :mode "\\.ts\\'"
+    :hook (typescript-mode . lsp-deferred)
+    :config
+    (setq typescript-indent-level 2))
 
-    ;; For JSON
-    (use-package json-mode
-      :ensure t
-      :mode "\\.json\\'"
-      :hook (json-mode . lsp-deferred))
+  ;; For JSON
+  (use-package json-mode
+    :ensure t
+    :mode "\\.json\\'"
+    :hook (json-mode . lsp-deferred))
 
-    ;; For Vue.js
-    (use-package vue-mode
-      :ensure t
-      :mode "\\.vue\\'"
-      :hook (vue-mode . lsp-deferred))
+  ;; For Vue.js
+  (use-package vue-mode
+    :ensure t
+    :mode "\\.vue\\'"
+    :hook (vue-mode . lsp-deferred))
 
-    ;; For Svelte
-    (use-package svelte-mode
-      :ensure t
-      :mode "\\.svelte\\'"
-      :hook (svelte-mode . lsp-deferred))
+  ;; For Svelte
+  (use-package svelte-mode
+    :ensure t
+    :mode "\\.svelte\\'"
+    :hook (svelte-mode . lsp-deferred))
 
-    ;; For HTML/CSS
-    (use-package web-mode
-      :ensure t
-      :mode (("\\.html?\\'" . web-mode)
-             ("\\.css\\'" . web-mode)
-             ("\\.tsx\\'" . web-mode)
-             ("\\.jsx\\'" . web-mode))
-      :hook (web-mode . lsp-deferred))
+  ;; For HTML/CSS
+  (use-package web-mode
+    :ensure t
+    :mode (("\\.html?\\'" . web-mode)
+           ("\\.css\\'" . web-mode)
+           ("\\.tsx\\'" . web-mode)
+           ("\\.jsx\\'" . web-mode))
+    :hook (web-mode . lsp-deferred))
 
-    (use-package scss-mode
-      :ensure t)
+  (use-package scss-mode
+    :ensure t)
 
-    ;; COMPANY MODE --------
+  (use-package go-mode
+    :ensure t
+    :mode "\\.go\\'"
+    :hook (go-mode . lsp-deferred))
 
-    (use-package company
-      :after lsp-mode
-      :hook (lsp-mode . company-mode)
-      :bind (:map company-active-map
-                  ("<tab>" . company-complete-selection))
-      (:map lsp-mode-map
-            ("<tab>" . company-indent-or-complete-common))
-      :custom
-      (company-minimum-prefix-length 1)
-      (company-idle-delay 0.0))
+  ;; COMPANY MODE --------
 
-    (use-package company-box
-      :hook (company-mode . company-box-mode))
+  (use-package company
+    :after lsp-mode
+    :hook (lsp-mode . company-mode)
+    :bind (:map company-active-map
+                ("<tab>" . company-complete-selection))
+    (:map lsp-mode-map
+          ("<tab>" . company-indent-or-complete-common))
+    :custom
+    (company-minimum-prefix-length 1)
+    (company-idle-delay 0.0))
 
-    ;; RAINBOW DELIMITERS -------
+  (use-package company-box
+    :hook (company-mode . company-box-mode))
 
-    (use-package rainbow-delimiters
-      :hook (prog-mode . rainbow-delimiters-mode))
+  ;; RAINBOW DELIMITERS -------
 
+  (use-package rainbow-delimiters
+    :hook (prog-mode . rainbow-delimiters-mode))
 
+(use-package flycheck
+  :ensure t
+  :init (global-flycheck-mode))
 #+end_src
 
 
