@@ -181,6 +181,13 @@ switch to recently files to each project, and etc.
     (projectile-mode +1))
 #+end_src
 
+* CIDER
+
+#+begin_src emacs-lisp
+  (use-package cider
+    :ensure t)
+#+end_src
+
 * Emacs improvments
 
 Here we have an important package, the WhichKey.
@@ -267,6 +274,9 @@ Improve how we use and remember the shortcuts.
            (web-mode . lsp-deferred)
            (vue-mode . lsp-deferred)
            (go-mode . lsp-deferred)
+           (clojure-mode . lsp-deferred)
+           (clojurec-mode . lsp-deferred)
+           (clojurescript-mode . lsp-deferred)
            (lsp-mode . lsp-enable-which-key-integration))
     :init
     (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
@@ -317,6 +327,14 @@ Improve how we use and remember the shortcuts.
     :hook (typescript-mode . lsp-deferred)
     :config
     (setq typescript-indent-level 2))
+
+  ;; CLOJURE -------------
+  (use-package clojure-mode
+    :ensure t
+    :mode ("\\.clj\\'" "\\.cljs\\'" "\\.cljc\\'")
+    :hook ((clojure-mode . lsp-deferred)
+           (clojurescript-mode . lsp-deferred)
+           (clojurec-mode . lsp-deferred)))
 
   ;; For JSON
   (use-package json-mode
@@ -374,9 +392,9 @@ Improve how we use and remember the shortcuts.
   (use-package rainbow-delimiters
     :hook (prog-mode . rainbow-delimiters-mode))
 
-(use-package flycheck
-  :ensure t
-  :init (global-flycheck-mode))
+  (use-package flycheck
+    :ensure t
+    :init (global-flycheck-mode))
 #+end_src
 
 
