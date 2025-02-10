@@ -12,6 +12,9 @@ eln-cache/
 .last-package-update-day
 projects
 smex-items
+.projectile*
+server/*
+workspace/*
 
 # Sesion files from EXWM
 session.*
