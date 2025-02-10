@@ -186,6 +186,7 @@ switch to recently files to each project, and etc.
 #+end_src
 
 * CIDER
+
 #+begin_src emacs-lisp
   (use-package cider
     :ensure t)
@@ -398,8 +399,6 @@ Improve how we use and remember the shortcuts.
   (use-package flycheck
     :ensure t
     :init (global-flycheck-mode))
-
-
 #+end_src
 
 
@@ -517,4 +516,3 @@ To open the comands in the middle of the window or other local, like M-x command
 That a good option to check if it's better than the bottom default mode.
 https://github.com/tumashu/ivy-posframe
 
-Test

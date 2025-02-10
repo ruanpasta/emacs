@@ -9,6 +9,9 @@ org-persist
 projectile*
 transient/
 eln-cache/
+.last-package-update-day
+projects
+smex-items
 
 # Sesion files from EXWM
 session.*
