@@ -53,14 +53,14 @@ Use-package and Melpa together is a power tool to configure and personalize the 
 
 ** Updating Emacs enviromnent variables
 
-#+begin_src emacs-lisp
-  ;; Setting the EMACS env variables
-  (use-package exec-path-from-shell
-    :ensure t
-    :config
-    (exec-path-from-shell-initialize)
-    (exec-path-from-shell-copy-envs '("PATH" "NODE_PATH")))
-#+end_src
+# #+begin_src emacs-lisp
+#   ;; Setting the EMACS env variables
+#   (use-package exec-path-from-shell
+#     :ensure t
+#     :config
+#     (exec-path-from-shell-initialize)
+#     (exec-path-from-shell-copy-envs '("PATH" "NODE_PATH")))
+# #+end_src
 
 ** Automatic Package Updates
 
@@ -100,7 +100,7 @@ Visual interface configs
   (scroll-bar-mode -1)
 
   ;; Defining the default font family
-  (set-face-attribute 'default nil :font "JetBrainsMono Nerd Font")
+  (set-face-attribute 'default nil :font "JetBrainsMono NF")
 
   ;; Increasing the font size
   (set-face-attribute 'default nil :height 140)
@@ -109,13 +109,17 @@ Visual interface configs
   (setq-default tab-width 2)
 
   ;; Set frame transparency
-  (set-frame-parameter (selected-frame) 'alpha '(90 . 90))
-  (add-to-list 'default-frame-alist '(alpha . (90 . 90)))
-  (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
-  (add-to-list 'default-frame-alist '(fullscreen . maximized))
+  (set-frame-parameter (selected-frame) 'alpha '(95 . 95))
+  (add-to-list 'default-frame-alist '(alpha . (95 . 95)))
+  ;; (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
+  ;; (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
   ;; Add the option to collapse function, objects etc ( C-c @ C-h )
   (add-hook 'prog-mode-hook #'hs-minor-mode)
+
+  ;; Change to use the visible bell instead of the sound
+  (setq visible-bell t)
+
 
 #+end_src
 
@@ -181,6 +185,12 @@ switch to recently files to each project, and etc.
     (projectile-mode +1))
 #+end_src
 
+* CIDER
+#+begin_src emacs-lisp
+  (use-package cider
+    :ensure t)
+#+end_src
+
 * Emacs improvments
 
 Here we have an important package, the WhichKey.
@@ -213,51 +223,51 @@ Improve how we use and remember the shortcuts.
 ** NEW CONFIGURATION
 
 #+begin_src emacs-lisp
-    ;; IVY and COUNSEL ---------------------
-    (use-package ivy
-      :diminish
-      :bind (("C-s" . swiper)
-             :map ivy-minibuffer-map
-             ("TAB" . ivy-alt-done)
-             ("C-l" . ivy-alt-done)
-             ("C-j" . ivy-next-line)
-             ("C-k" . ivy-previous-line)
-             :map ivy-switch-buffer-map
-             ("C-k" . ivy-previous-line)
-             ("C-l" . ivy-done)
-             ("C-d" . ivy-switch-buffer-kill)
-             :map ivy-reverse-i-search-map
-             ("C-k" . ivy-previous-line)
-             ("C-d" . ivy-reverse-i-search-kill))
-      :config
-      (ivy-mode 1))
+  ;; IVY and COUNSEL ---------------------
+  (use-package ivy
+    :diminish
+    :bind (("C-s" . swiper)
+           :map ivy-minibuffer-map
+           ("TAB" . ivy-alt-done)
+           ("C-l" . ivy-alt-done)
+           ("C-j" . ivy-next-line)
+           ("C-k" . ivy-previous-line)
+           :map ivy-switch-buffer-map
+           ("C-k" . ivy-previous-line)
+           ("C-l" . ivy-done)
+           ("C-d" . ivy-switch-buffer-kill)
+           :map ivy-reverse-i-search-map
+           ("C-k" . ivy-previous-line)
+           ("C-d" . ivy-reverse-i-search-kill))
+    :config
+    (ivy-mode 1))
 
-    (use-package ivy-rich
-      :after counsel
-      :init
-      (ivy-rich-mode 1))
+  (use-package ivy-rich
+    :after counsel
+    :init
+    (ivy-rich-mode 1))
 
-    (use-package counsel
-      :after ivy:
-      :bind (("C-M-j" . 'counsel-switch-buffer)
-             :map minibuffer-local-map
-             ("C-r" . 'counsel-minibuffer-history))
-      :custom
-      (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
-      :config
-      (counsel-mode 1))
+  (use-package counsel
+    :after ivy:
+    :bind (("C-M-j" . 'counsel-switch-buffer)
+           :map minibuffer-local-map
+           ("C-r" . 'counsel-minibuffer-history))
+    :custom
+    (counsel-linux-app-format-function #'counsel-linux-app-format-function-name-only)
+    :config
+    (counsel-mode 1))
 
 
-    (use-package ivy-prescient
-      :after counsel
-      :custom
-      (ivy-prescient-enable-filtering nil)
-      :config
-      ;; Uncomment the following line to have sorting remembered across sessions!
-                                            ;(prescient-persist-mode 1)
-      (ivy-prescient-mode 1))
+  (use-package ivy-prescient
+    :after counsel
+    :custom
+    (ivy-prescient-enable-filtering nil)
+    :config
+    ;; Uncomment the following line to have sorting remembered across sessions!
+                                          ;(prescient-persist-mode 1)
+    (ivy-prescient-mode 1))
 
-    ;; LSP ---------------
+  ;; LSP ---------------
   (use-package lsp-mode
     :ensure t
     :commands (lsp lsp-deferred)
@@ -266,107 +276,128 @@ Improve how we use and remember the shortcuts.
            (typescript-mode . lsp-deferred)
            (web-mode . lsp-deferred)
            (vue-mode . lsp-deferred)
+           (go-mode . lsp-deferred)
+           (clojure-mode . lsp-deferred)
+           (clojurec-mode . lsp-deferred)
+           (clojurescript-mode . lsp-deferred)
            (lsp-mode . lsp-enable-which-key-integration))
     :init
     (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
     :config
     (lsp-enable-which-key-integration t))
-(setq lsp-log-io nil)
+  (setq lsp-log-io nil)
 
-    ;; LSP UI --------
-    (use-package lsp-ui
-      :after lsp-mode
-      :commands lsp-ui-mode
-      :init
-      (setq lsp-ui-doc-enable t
-            lsp-ui-doc-position 'top
-            lsp-ui-doc-header t
-            lsp-ui-doc-include-signature t
-            lsp-ui-sideline-enable t
-            lsp-ui-sideline-ignore-duplicate t
-            lsp-ui-sideline-show-hover nil
-            lsp-ui-sideline-show-symbol t
-            lsp-ui-sideline-show-diagnostics t
-            lsp-ui-sideline-update-mode 'line
-            lsp-ui-sideline-delay 1.0
-            lsp-ui-imenu-enable t
-            lsp-ui-flycheck-enable t
-            lsp-ui-flycheck-list-position 'right
-            lsp-ui-flycheck-live-reporting t
-            lsp-ui-peek-enable t
-            lsp-ui-peek-list-width 60
-            lsp-ui-peek-peek-height 25
-            lsp-ui-peek-fontify 'always
-            lsp-ui-imenu-kind-position 'top
-            lsp-headerline-breadcrumb-enable nil
-            lsp-ui-remap-xref-keybindings t))
+  ;; LSP UI --------
+  (use-package lsp-ui
+    :after lsp-mode
+    :commands lsp-ui-mode
+    :init
+    (setq lsp-ui-doc-enable t
+          lsp-ui-doc-position 'top
+          lsp-ui-doc-header t
+          lsp-ui-doc-include-signature t
+          lsp-ui-sideline-enable t
+          lsp-ui-sideline-ignore-duplicate t
+          lsp-ui-sideline-show-hover nil
+          lsp-ui-sideline-show-symbol t
+          lsp-ui-sideline-show-diagnostics t
+          lsp-ui-sideline-update-mode 'line
+          lsp-ui-sideline-delay 1.0
+          lsp-ui-imenu-enable t
+          lsp-ui-flycheck-enable t
+          lsp-ui-flycheck-list-position 'right
+          lsp-ui-flycheck-live-reporting t
+          lsp-ui-peek-enable t
+          lsp-ui-peek-list-width 60
+          lsp-ui-peek-peek-height 25
+          lsp-ui-peek-fontify 'always
+          lsp-ui-imenu-kind-position 'top
+          lsp-headerline-breadcrumb-enable nil
+          lsp-ui-remap-xref-keybindings t))
 
-    ;; LSP TREEMACS -------
-    (use-package lsp-treemacs
-      :after lsp)
+  ;; LSP TREEMACS -------
+  (use-package lsp-treemacs
+    :after lsp)
 
-    ;; LSP IVY
+  ;; LSP IVY
 
-    (use-package lsp-ivy
-      :after lsp)
+  (use-package lsp-ivy
+    :after lsp)
 
-    ;; TYPESCRIPT -------------
-    (use-package typescript-mode
-      :mode "\\.ts\\'"
-      :hook (typescript-mode . lsp-deferred)
-      :config
-      (setq typescript-indent-level 2))
+  ;; TYPESCRIPT -------------
+  (use-package typescript-mode
+    :mode "\\.ts\\'"
+    :hook (typescript-mode . lsp-deferred)
+    :config
+    (setq typescript-indent-level 2))
 
-    ;; For JSON
-    (use-package json-mode
-      :ensure t
-      :mode "\\.json\\'"
-      :hook (json-mode . lsp-deferred))
+  ;; CLOJURE -------------
+  (use-package clojure-mode
+    :ensure t
+    :mode ("\\.clj\\'" "\\.cljs\\'" "\\.cljc\\'")
+    :hook ((clojure-mode . lsp-deferred)
+           (clojurescript-mode . lsp-deferred)
+           (clojurec-mode . lsp-deferred)))
 
-    ;; For Vue.js
-    (use-package vue-mode
-      :ensure t
-      :mode "\\.vue\\'"
-      :hook (vue-mode . lsp-deferred))
+  ;; For JSON
+  (use-package json-mode
+    :ensure t
+    :mode "\\.json\\'"
+    :hook (json-mode . lsp-deferred))
 
-    ;; For Svelte
-    (use-package svelte-mode
-      :ensure t
-      :mode "\\.svelte\\'"
-      :hook (svelte-mode . lsp-deferred))
+  ;; For Vue.js
+  (use-package vue-mode
+    :ensure t
+    :mode "\\.vue\\'"
+    :hook (vue-mode . lsp-deferred))
 
-    ;; For HTML/CSS
-    (use-package web-mode
-      :ensure t
-      :mode (("\\.html?\\'" . web-mode)
-             ("\\.css\\'" . web-mode)
-             ("\\.tsx\\'" . web-mode)
-             ("\\.jsx\\'" . web-mode))
-      :hook (web-mode . lsp-deferred))
+  ;; For Svelte
+  (use-package svelte-mode
+    :ensure t
+    :mode "\\.svelte\\'"
+    :hook (svelte-mode . lsp-deferred))
 
-    (use-package scss-mode
-      :ensure t)
+  ;; For HTML/CSS
+  (use-package web-mode
+    :ensure t
+    :mode (("\\.html?\\'" . web-mode)
+           ("\\.css\\'" . web-mode)
+           ("\\.tsx\\'" . web-mode)
+           ("\\.jsx\\'" . web-mode))
+    :hook (web-mode . lsp-deferred))
 
-    ;; COMPANY MODE --------
+  (use-package scss-mode
+    :ensure t)
 
-    (use-package company
-      :after lsp-mode
-      :hook (lsp-mode . company-mode)
-      :bind (:map company-active-map
-                  ("<tab>" . company-complete-selection))
-      (:map lsp-mode-map
-            ("<tab>" . company-indent-or-complete-common))
-      :custom
-      (company-minimum-prefix-length 1)
-      (company-idle-delay 0.0))
+  (use-package go-mode
+    :ensure t
+    :mode "\\.go\\'"
+    :hook (go-mode . lsp-deferred))
 
-    (use-package company-box
-      :hook (company-mode . company-box-mode))
+  ;; COMPANY MODE --------
 
-    ;; RAINBOW DELIMITERS -------
+  (use-package company
+    :after lsp-mode
+    :hook (lsp-mode . company-mode)
+    :bind (:map company-active-map
+                ("<tab>" . company-complete-selection))
+    (:map lsp-mode-map
+          ("<tab>" . company-indent-or-complete-common))
+    :custom
+    (company-minimum-prefix-length 1)
+    (company-idle-delay 0.0))
 
-    (use-package rainbow-delimiters
-      :hook (prog-mode . rainbow-delimiters-mode))
+  (use-package company-box
+    :hook (company-mode . company-box-mode))
+
+  ;; RAINBOW DELIMITERS -------
+
+  (use-package rainbow-delimiters
+    :hook (prog-mode . rainbow-delimiters-mode))
+
+  (use-package flycheck
+    :ensure t
+    :init (global-flycheck-mode))
 
 
 #+end_src
@@ -411,28 +442,33 @@ It's a great option for an apresentation about emacs.
 ** Org
 
 #+begin_src emacs-lisp
-  (use-package org
-    :ensure t
-    :custom
-    (org-confirm-babel-evaluate nil)
-    (org-startup-indented t)
-    (org-ellipsis " ▾"))
+    (use-package org
+      :ensure t
+      :custom
+      (org-confirm-babel-evaluate nil)
+      (org-startup-indented t)
+      (org-ellipsis " ▾"))
 
-  (use-package org-bullets
-    :ensure t
-    :after org
-    :hook (org-mode . org-bullets-mode)
-    :custom
-    (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
+    (use-package org-bullets
+      :ensure t
+      :after org
+      :hook (org-mode . org-bullets-mode)
+      :custom
+      (org-bullets-bullet-list '("◉" "○" "●" "○" "●" "○" "●")))
 
-  (org-babel-do-load-languages
-   'org-babel-load-languages
-   '((js . t)))
+  (use-package ob-go
+    :ensure t)
 
-  (use-package toc-org
-    :ensure t
-    :config
-    (toc-org-mode 1))
+    (org-babel-do-load-languages
+     'org-babel-load-languages
+     '((js . t)
+       (go . t)
+       ))
+
+    (use-package toc-org
+      :ensure t
+      :config
+      (toc-org-mode 1))
 #+end_src
 
 #+RESULTS:
@@ -462,6 +498,19 @@ The Evil package give us a power of text editing with VIM inside the emacs.
 
 ** TODO Hydra 
 To help/eliminate repetitive commands in emacs. Check if the package is hydra. 
+
+** Org Agenda
+
+#+begin_src emacs-lisp
+(setq org-agenda-files
+      (directory-files-recursively "C:/Users/Ruan_/OneDrive/Documentos/projects/agenda" "\\`[^#].*\\.org\\'"))
+
+      (global-set-key (kbd "C-c a") 'org-agenda)
+      (global-set-key (kbd "C-c c") 'org-capture)  ;; Quick capture tasks
+      (global-set-key (kbd "C-c l") 'org-store-link)  ;; Store links
+
+      (setq org-agenda-show-tags t)
+#+end_src
 
 ** Ivy Postfram
 To open the comands in the middle of the window or other local, like M-x command or any other.
