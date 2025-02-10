@@ -273,6 +273,10 @@ Improve how we use and remember the shortcuts.
            (typescript-mode . lsp-deferred)
            (web-mode . lsp-deferred)
            (vue-mode . lsp-deferred)
+           (go-mode . lsp-deferred)
+           (clojure-mode . lsp-deferred)
+           (clojurec-mode . lsp-deferred)
+           (clojurescript-mode . lsp-deferred)
            (lsp-mode . lsp-enable-which-key-integration))
     :init
     (setq lsp-keymap-prefix "C-c l")  ;; Or 'C-l', 's-l'
@@ -324,6 +328,14 @@ Improve how we use and remember the shortcuts.
       :config
       (setq typescript-indent-level 2))
 
+    ;; CLOJURE -------------
+      (use-package clojure-mode
+        :ensure t
+        :mode ("\\.clj\\'" "\\.cljs\\'" "\\.cljc\\'")
+        :hook ((clojure-mode . lsp-deferred)
+              (clojurescript-mode . lsp-deferred)
+              (clojurec-mode . lsp-deferred)))
+
     ;; For JSON
     (use-package json-mode
       :ensure t
@@ -354,6 +366,11 @@ Improve how we use and remember the shortcuts.
     (use-package scss-mode
       :ensure t)
 
+    (use-package go-mode
+      :ensure t
+      :mode "\\.go\\'"
+      :hook (go-mode . lsp-deferred))
+    
     ;; COMPANY MODE --------
 
     (use-package company
