@@ -109,8 +109,8 @@ Visual interface configs
   (setq-default tab-width 2)
 
   ;; Set frame transparency
-  (set-frame-parameter (selected-frame) 'alpha '(90 . 90))
-  (add-to-list 'default-frame-alist '(alpha . (90 . 90)))
+  (set-frame-parameter (selected-frame) 'alpha '(95 . 95))
+  (add-to-list 'default-frame-alist '(alpha . (95 . 95)))
   (set-frame-parameter (selected-frame) 'fullscreen 'maximized)
   (add-to-list 'default-frame-alist '(fullscreen . maximized))
 
@@ -220,7 +220,7 @@ Improve how we use and remember the shortcuts.
 ** NEW CONFIGURATION
 
 #+begin_src emacs-lisp
-    ;; IVY and COUNSEL ---------------------
+   ;; IVY and COUNSEL ---------------------
     (use-package ivy
       :diminish
       :bind (("C-s" . swiper)
@@ -489,8 +489,35 @@ The Evil package give us a power of text editing with VIM inside the emacs.
 ** TODO Hydra 
 To help/eliminate repetitive commands in emacs. Check if the package is hydra. 
 
+** Org Agenda
+
+#+begin_src emacs-lisp
+  (setq org-agenda-files
+        (directory-files-recursively "/home/ruan.pasta/projects/agenda" "\\`[^#].*\\.org\\'"))
+
+  (setq org-agenda-files
+        (remove "/home/ruan.pasta/projects/agenda/dg.org" org-agenda-files)) 
+
+  (global-set-key (kbd "C-c a") 'org-agenda)
+  (global-set-key (kbd "C-c c") 'org-capture)
+  (global-set-key (kbd "C-c l") 'org-store-link)
+
+  (setq org-agenda-show-tags t)
+#+end_src
+
 ** Ivy Postfram
 To open the comands in the middle of the window or other local, like M-x command or any other.
 That a good option to check if it's better than the bottom default mode.
 https://github.com/tumashu/ivy-posframe
 
+** Paredit
+
+#+begin_src emacs-lisp
+  ;; (use-package paredit
+  ;;   :ensure t
+  ;;   :hook ((emacs-lisp-mode . paredit-mode)
+  ;;          (lisp-mode . paredit-mode)
+  ;;          (clojure-mode . paredit-mode))
+  ;;   :config
+  ;;   (add-hook 'paredit-mode-hook 'paredit-mode))  
+#+end_src
