@@ -83,12 +83,18 @@
          ("C-c p b" . projectile-switch-to-buffer)
          ("C-c p r" . projectile-replace))
   :config
-  (add-to-list 'projectile-globally-ignored-directories "node_modules")
-  (projectile-mode +1))
+   (add-to-list 'projectile-globally-ignored-directories "node_modules")
+	 (add-to-list 'projectile-globally-ignored-directories ".shadow-cljs")
+   (projectile-mode +1))
+
+;; Clojure mode
+(use-package clojure-mode
+  :ensure t)
 
 ;; Cider
 (use-package cider
-  :ensure t)
+  :ensure t
+	:after clojure-mode)
 
 ;; Whichkey
 (use-package which-key
@@ -184,7 +190,6 @@
   (ivy-prescient-mode 1))
 
 ;; Paredit
-
 (use-package paredit													
   :ensure t																	  
   :hook ((emacs-lisp-mode . paredit-mode)		  
@@ -214,6 +219,16 @@
   (setq company-minimum-prefix-length 1
         company-idle-delay 0.0))
 
+;; Flycheck
+;; (use-package flycheck
+;;   :ensure t)
+
+;; Flycheck Kondo
+;; (use-package flycheck-clj-kondo
+;;   :ensure t
+;;   :config
+;;   (add-hook 'clojure-mode-hook #'flycheck-mode))
+
 ;; Supress popup warnings in emacs
 (setq warning-suppress-log-types '((comp)))
 (setq warning-suppress-types '((comp)))
@@ -226,7 +241,7 @@
  '(org-agenda-files
 	 '("/home/ruan.pasta/projects/agenda/brasil-paralelo.org" "/home/ruan.pasta/projects/agenda/personal.org"))
  '(package-selected-packages
-	 '(exec-path-from-shell company-cider company paredit ivy-prescient counsel ivy-rich ivy almost-mono-themes toc-org org-bullets which-key magit cider projectile auto-package-update)))
+	 '(flycheck-clj-kondo flycheck exec-path-from-shell company-cider company paredit ivy-prescient counsel ivy-rich ivy almost-mono-themes toc-org org-bullets which-key magit cider projectile auto-package-update)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
