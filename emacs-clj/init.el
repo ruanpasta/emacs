@@ -65,13 +65,15 @@
 ;; Add the option to collapse function, objects etc ( C-c @ C-h )
 (add-hook 'prog-mode-hook #'hs-minor-mode)
 
+;; Remove a ring bell sound
+(setq ring-bell-function 'ignore)
 
 (use-package almost-mono-themes
   :config
-  ;; (load-theme 'almost-mono-black t)
+  (load-theme 'almost-mono-black t)
   ;; (load-theme 'almost-mono-gray t)
-  (load-theme 'almost-mono-cream t))
-;;(load-theme 'almost-mono-white t))
+  ;; (load-theme 'almost-mono-cream t)
+	)
 
 ;; --- IMPORTANT PACKAGES ---
 ;; To improve the project navigation and search
@@ -233,15 +235,26 @@
 (setq warning-suppress-log-types '((comp)))
 (setq warning-suppress-types '((comp)))
 
+;; Prettier
+(use-package prettier
+  :ensure t
+  :hook ((js2-mode . prettier-mode)
+         (web-mode . prettier-mode)
+         (typescript-mode . prettier-mode)
+         (json-mode . prettier-mode)
+         (scss-mode . prettier-mode)))
+
 (custom-set-variables
  ;; custom-set-variables was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
  ;; Your init file should contain only one such instance.
  ;; If there is more than one, they won't work right.
+ '(custom-safe-themes
+	 '("d0fd069415ef23ccc21ccb0e54d93bdbb996a6cce48ffce7f810826bb243502c" default))
  '(org-agenda-files
 	 '("/home/ruan.pasta/projects/agenda/brasil-paralelo.org" "/home/ruan.pasta/projects/agenda/personal.org"))
  '(package-selected-packages
-	 '(flycheck-clj-kondo flycheck exec-path-from-shell company-cider company paredit ivy-prescient counsel ivy-rich ivy almost-mono-themes toc-org org-bullets which-key magit cider projectile auto-package-update)))
+	 '(lsp-treemacs lsp-ui lsp-mode ob-sh doom-themes flycheck-clj-kondo flycheck exec-path-from-shell company-cider company paredit ivy-prescient counsel ivy-rich ivy almost-mono-themes toc-org org-bullets which-key magit cider projectile auto-package-update)))
 (custom-set-faces
  ;; custom-set-faces was added by Custom.
  ;; If you edit it by hand, you could mess it up, so be careful.
